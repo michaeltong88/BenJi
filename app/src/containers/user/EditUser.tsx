@@ -6,16 +6,20 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {TextField} from 'react-native-material-textfield';
 import {Dropdown} from 'react-native-material-dropdown-v2-fixed';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
-import {Button} from 'components';
+import {Button, LoadingIndicator} from 'components';
 
 import {User} from 'types/User.type';
+import {EActionTypes} from 'types/ActionTypes.enum';
 import {Constants, Styles} from 'globals';
+import {RootState} from 'stores';
+import {usePrevious} from 'hooks';
 
 const avatarImage = require('assets/imgs/default_avatar.png');
 
@@ -27,6 +31,11 @@ type EditUserProps = {
 const EditUser = (props: EditUserProps) => {
   const {navigation, route} = props;
   const {user} = route.params;
+
+  const isUpdating = useSelector((state: RootState) => state.user.isUpdating);
+  const prevProps: any = usePrevious({isUpdating});
+
+  const dispatch = useDispatch();
 
   const [name, setName] = useState(user.name);
   const [age, setAge] = useState(user.age.toString());
@@ -44,6 +53,12 @@ const EditUser = (props: EditUserProps) => {
     setNavigationBar();
   }, []);
 
+  useEffect(() => {
+    if (prevProps && prevProps.isUpdating && !isUpdating) {
+      navigation.goBack();
+    }
+  }, [isUpdating, prevProps]);
+
   const setNavigationBar = () => {
     navigation.setOptions({
       title: 'Edit User',
@@ -53,13 +68,20 @@ const EditUser = (props: EditUserProps) => {
   const handleUploadAvatar = () => {};
 
   const handleSave = () => {
-    console.log('name: ', name);
-    console.log('age: ', age);
-    console.log('mode: ', mode);
+    dispatch({
+      type: EActionTypes.UPDATE_USER,
+      payload: {
+        ...user,
+        name,
+        age,
+        mode,
+      },
+    });
   };
 
   return (
     <View style={styles.container}>
+      <LoadingIndicator isLoading={isUpdating} />
       <KeyboardAvoidingView>
         <TouchableOpacity
           activeOpacity={0.8}

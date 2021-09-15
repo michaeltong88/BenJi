@@ -12,6 +12,8 @@ module.exports = {
           components: './src/components',
           utils: './src/utils',
           globals: './src/globals',
+          hooks: './src/hooks',
+          stores: './src/stores',
           types: './src/types',
         },
       },

@@ -17,6 +17,8 @@
       "components/*": ["components/*"],
       "utils/*": ["utils/*"],
       "globals/*": ["globals/*"],
+      "hooks/*": ["hooks/*"],
+      "stores/*": ["stores/*"],
       "types/*": ["types/*"]
     }
   },

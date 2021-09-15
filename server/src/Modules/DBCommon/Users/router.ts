@@ -32,13 +32,18 @@ router.post('/user', async (req: Request, res: Response) => {
     return res.status(201).send(newUser);
 });
 
-router.put('/user/:id', async (req: Request, res: Response) => {
+router.put('/user/:id', (req: Request, res: Response) => {
     const { id } = req.params;
     const { name, mode, age, activeSubscription } = req.body;
-    await User.findByIdAndUpdate(id, {
+    User.findByIdAndUpdate(id, {
         name, mode, age, activeSubscription
-    }, (result) => {
-        return res.status(201).send('user updated');
+    }, async (err, docs) => {
+        if (err) {
+            console.log(err);
+        } else {
+            const updatedUser = await User.findById(id);
+            return res.status(200).send(updatedUser);
+        }
     });
 });
 
