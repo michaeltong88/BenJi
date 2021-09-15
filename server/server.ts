@@ -4,6 +4,7 @@ import express, { Application, Request, Response } from 'express';
 import { createServer, Server } from 'http';
 import mongoose from 'mongoose';
 import { autoCreateUsers } from './src/Modules/DBCommon/Service';
+import { userRouter } from './src/Modules/DBCommon/Users/router';
 
 class App {
   public app: Application;
@@ -30,6 +31,8 @@ class App {
     this.app.use(express.json());
     //support application/x-www-form-urlencoded post data
     this.app.use(express.urlencoded({ extended: false }));
+    // set routers
+    this.app.use(userRouter);
   }
 
   private mongoSetup(): void {

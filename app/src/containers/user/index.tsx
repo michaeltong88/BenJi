@@ -43,12 +43,13 @@ const Users = (props: UsersProps) => {
   const sortBottomSheetRef = useRef<BottomSheetModal>(null);
   const fileterBottomSheetRef = useRef<BottomSheetModal>(null);
 
-  const [users, setUsers] = useState(UsersList);
+  const [users, setUsers] = useState<User[]>([]);
   const [isActiveSubscription, setIsActiveSubscription] = useState(false); // filter
   const [sortWith, setSortWith] = useState(Constants.sorts.name); // sort
 
   useEffect(() => {
     setNavigationBar();
+    handleSort(sortWith);
   }, []);
 
   const setNavigationBar = () => {
