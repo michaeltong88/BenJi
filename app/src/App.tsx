@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {LogBox} from 'react-native';
+import {LogBox, StatusBar} from 'react-native';
 import {Provider} from 'react-redux';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
@@ -23,6 +23,7 @@ const App = () => {
     <Provider store={store}>
       <SafeAreaProvider>
         <BottomSheetModalProvider>
+          <StatusBar barStyle="light-content" />
           <AppNavigator />
         </BottomSheetModalProvider>
       </SafeAreaProvider>

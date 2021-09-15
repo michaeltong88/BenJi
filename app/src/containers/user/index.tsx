@@ -30,6 +30,7 @@ const Users = (props: UsersProps) => {
 
   const sortBottomSheetRef = useRef<BottomSheetModal>(null);
   const fileterBottomSheetRef = useRef<BottomSheetModal>(null);
+  const offsetRef = useRef(0);
 
   const [currentUsers, setCurrentUsers] = useState<User[]>([]);
   const [isActiveSubscription, setIsActiveSubscription] = useState(false); // filter
@@ -37,7 +38,10 @@ const Users = (props: UsersProps) => {
 
   useEffect(() => {
     setNavigationBar();
-    dispatch({type: EActionTypes.GET_USERS});
+    dispatch({
+      type: EActionTypes.GET_USERS,
+      payload: {offset: offsetRef.current},
+    });
   }, []);
 
   useEffect(() => {
@@ -101,6 +105,19 @@ const Users = (props: UsersProps) => {
     navigation.navigate('EditUser', {user});
   };
 
+  const handleEndReached = () => {
+    if (userState.isFetching || !userState.hasMore) {
+      return;
+    }
+
+    offsetRef.current += 1;
+
+    dispatch({
+      type: EActionTypes.GET_USERS,
+      payload: {offset: offsetRef.current},
+    });
+  };
+
   const renderBottomSheets = () => (
     <>
       <BottomModal ref={sortBottomSheetRef} height={200} title="Sort">
@@ -130,6 +147,8 @@ const Users = (props: UsersProps) => {
         data={currentUsers || []}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
+        onEndReachedThreshold={0.2}
+        onEndReached={() => handleEndReached()}
       />
       {renderBottomSheets()}
     </View>

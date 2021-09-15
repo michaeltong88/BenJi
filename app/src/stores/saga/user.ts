@@ -5,9 +5,9 @@ import {UserResponse} from 'types/UserResponse.type';
 import {EActionTypes} from 'types/ActionTypes.enum';
 import {getUsers, updateUser} from 'stores/api';
 
-function* getUsersSaga() {
+function* getUsersSaga({payload}: {payload: {offset: number}}) {
   try {
-    const response: UserResponse = yield getUsers();
+    const response: UserResponse = yield getUsers(payload.offset);
     yield put({type: EActionTypes.GET_USERS_SUCCESS, payload: response});
   } catch (error) {
     console.log(error);

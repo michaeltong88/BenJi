@@ -15,14 +15,14 @@ const userReducer = (state = initState, action: any) => {
       return {
         ...state,
         isFetching: true,
-        users: [],
+        users: action.payload.offset === 0 ? [] : state.users,
       };
     case EActionTypes.GET_USERS_SUCCESS:
       return {
         ...state,
         isFetching: false,
         hasMore: action.payload.hasMore,
-        users: action.payload.users,
+        users: [...state.users, ...action.payload.users],
       };
     case EActionTypes.GET_USERS:
       return {

@@ -3,8 +3,12 @@ import axios from 'axios';
 import {UserResponse} from 'types/UserResponse.type';
 import {User} from 'types/User.type';
 
-export const getUsers = async (): Promise<UserResponse> => {
-  const response = await axios.get('/user');
+import {Constants} from 'globals';
+
+export const getUsers = async (offset: number): Promise<UserResponse> => {
+  const response = await axios.get(
+    `/user?offset=${offset}&limit=${Constants.usersPerPage}`,
+  );
   return response.data;
 };
 

@@ -7,7 +7,7 @@ router.get('/user', async (req: Request, res: Response) => {
     const { offset, limit } = req.query;
     const skipNumber = Number(offset) * Number(limit);
     let users = [];
-    if (skipNumber > 0) {
+    if (skipNumber != NaN) {
         users = await User.find({}, null, {skip: skipNumber, limit: Number(limit)});
     } else {
         users = await User.find({});
